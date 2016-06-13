@@ -1,0 +1,228 @@
+//任意数求和
+ function add(){
+        var total=0;
+        for(var i=0; i<arguments.length; i++){
+            //进行有效数字的判断
+            if(!isNaN(arguments[i])){
+                total+=Number(arguments[i]);//防止字符串拼接
+            }
+        }
+        return total;//因为外面要接受这个数值，所以此函数必须得有返回值；
+    }
+    var num=add(1,2,3,4,'3','3px');
+    console.log(num)
+
+ //需求：获取0-61之间不重复的随机数，总共获取4个；
+    var ary=[];
+    for(var i=0; i<4; i++){
+        var rnd=Math.round(Math.random()*61);
+        /*if(ary.indexOf(rnd)!==-1){
+            i--;
+            continue;
+        }
+        ary.push(rnd);*/
+        if(ary.indexOf(rnd)!==-1){//找到重复
+            i--;
+        }else{//没找到
+            ary.push(rnd);
+        }
+    }
+             第二种方法
+ while(ary.length<4){
+       var rnd=Math.round(Math.random()*61);
+       if(ary.indexOf(rnd)===-1){
+           ary.push(rnd);
+       }
+   }
+    document.write(ary)
+
+ //随机不重复验证码
+
+ var strCode='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    var str='';
+    var ary=[];
+    for(var i=0; i<4; i++){
+        var rnd=Math.round(Math.random()*61);
+        if(ary.indexOf(rnd)!==-1){
+            i--;
+        }else{
+            ary.push(rnd);
+            str+=strCode.charAt(rnd);
+        }
+    }
+             第二种方法
+    while(ary.length<4){
+        var rnd=Math.round(Math.random()*61);
+        if(ary.indexOf(rnd)===-1){
+            ary.push(rnd);
+            str+=strCode.charAt(rnd);
+        }
+    }
+    document.body.innerHTML=str;
+
+           //获取元素
+ var oUl=document.getElementsByTagName('ul')[0];
+    //children 也可以拿到子元素，但是不兼容IE8；
+    function getChildren(curEle){
+        var ary=[];
+        var aChild=curEle.childNodes;
+        for(var i=0; i<aChild.length; i++){
+            if(aChild[i].nodeType===1){
+                //ary.push(aChild[i]);
+                //ary[ary.length]=aChild[i];
+                ary.splice(ary.length,0,aChild[i]);
+            }
+        }
+        return ary;
+    }
+    var aLi=getChildren(oUl);
+    console.log(aLi.length)
+
+    //获取上一个哥哥元素节点
+  var oUl=document.getElementsByTagName('ul')[0];
+    var aLi=oUl.getElementsByTagName('li');
+   /* //previousElementSibling;
+   console.log(aLi[2].previousElementSibling)*/
+    function prev(curEle){
+        //1.高级浏览器
+        if('previousElementSibling' in curEle){
+            return curEle.previousElementSibling;
+        }
+        //2.低级浏览器的兼容
+        var prev=curEle.previousSibling;
+        //循环条件：1）prev必须是个节点 2）一定不是元素节点
+        while(prev && prev.nodeType!==1){
+            prev=prev.previousSibling;
+        }
+        return prev;
+    }
+    prev(aLi[2]).innerHTML='zhufeng';
+
+    //隔行换色两种情况
+  var aLi=document.getElementsByTagName('li');
+    for(var i=0; i<aLi.length; i++){
+        if(i%3===0){
+            aLi[i].className='blue';
+        }else if(i%3===1){
+            aLi[i].className='red';
+        }else{
+            aLi[i].className='green';
+        }
+    }
+    var i=0;//定义
+
+    while(i<aLi.length){//条件
+        switch (i%3){
+            case 0:
+                aLi[i].className='blue';
+                break;
+            case 1:
+                aLi[i].className='red';
+                break;
+            default :
+                aLi[i].className='green';
+                break;
+        }
+        i++;//自增；
+    }
+
+       //插排
+ var ary=[29,34,12,21,6,9];
+    function insertSort(ary){
+        //先给左手存一张牌，他是一个数组；
+        var left=ary.splice(0,1);
+        //拿右手中的每一项，跟左手进行比较
+        for(var i=0; i<ary.length; i++){
+            //跟左手从后往前的比较
+            for(var j=left.length-1;j>=0;){
+                if(ary[i]<left[j]){//右手中的某一个数字，比左手最后一项小
+                    //继续往左比较
+                    j--;
+                    if(j===-1){//如果比较完左手每张牌，还是比他小；
+                        left.unshift(ary[i]);//直接插入左手每张牌的最前面；
+                    }
+                }else{//如果比索引为j的元素大；直接插入到j+1的前面；
+                    left.splice(j+1,0,ary[i]);
+                    break;
+                }
+            }
+        }
+        return left;
+    }
+    console.log(insertSort(ary))
+
+             //快排
+   var ary=[34,28,9,12,26];
+ function quickSort(ary){
+        //什么请款不再拆分 ary.length<=1;
+        if(ary.length<=1){
+            return ary;
+        }
+        var num=Math.floor(ary.length/2);//中间数的索引；
+        var numValue=ary.splice(num,1)[0]; //中间这个数拿出来；
+        var left=[];
+        var right=[];
+        //循环数组中的每一项，跟numValue进行比较，比他小的放左边；比他大的放右边；
+        for(var i=0; i<ary.length; i++){
+            if(ary[i]<numValue){
+                left.push(ary[i]);
+            }else{
+                right.push(ary[i]);
+            }
+        }
+        return quickSort(left).concat([numValue],quickSort(right));
+    }
+    console.log(quickSort(ary))
+
+               //去重
+var ary=[1,2,1,2,1,2,3,4,5,2,3,4,5];
+    //双重for循环
+    for(var i=0; i<ary.length; i++){
+     for(var j=i+1; j<ary.length; j++){
+     if(ary[i]===ary[j]){
+     ary.splice(j,1);
+     i--;
+     }
+     }
+     }
+    //2.sort
+    ary.sort(function(a,b){
+     return a-b;
+     });
+     for(var i=0; i<ary.length; i++){
+     if(ary[i]===ary[i+1]){
+     ary.splice(i,1);
+     i--;
+     }
+     }
+    //3.对象
+    var obj={};
+    for(var i=0; i<ary.length; i++){
+        if( obj[ary[i]]===ary[i]){
+            ary.splice(i,1);
+            i--;
+        }
+        obj[ary[i]]=ary[i];
+    }
+    obj=null;
+    //4.新数组
+    var ary2=[];
+    for(var i=0; i<ary.length; i++){
+        if(ary2.indexOf(ary[i])===-1){
+            ary2.push(ary[i])
+        }
+    }
+    console.log(ary2)
+
+              //冒泡
+ var ary=[24,34,12,8,9];
+    for(var i=0; i<ary.length-1;i++){
+        for(var j=0; j<ary.length-1-i; j++){
+            if(ary[j]>ary[j+1]){
+                var tmp=ary[j];
+                ary[j]=ary[j+1];
+                ary[j+1]=tmp;
+            }
+        }
+    }
+    console.log(ary)
